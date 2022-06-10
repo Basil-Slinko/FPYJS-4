@@ -1,21 +1,21 @@
 const goods = {
-    1: {                                                         // https://www.lamoda.ru/p/mp002xw15tkd/clothes-incity-rubashka/
-        id: 1,                                                   // Код товара
-        name: 'Рубашка',                                         // Наименование
-        description: 'Белая рубашка в голубую полоску',          // Описание
-        sizes: [42, 44, 46, 48],                                 // [массив возможных размеров]
-        price: 3000,                                             // цена товара
-        available: true,                                         // Признак доступности для продажи
+    1: {                                                         
+        id: 1,                                                   
+        name: 'Рубашка',                                         
+        description: 'Белая рубашка в голубую полоску',          
+        sizes: [42, 44, 46, 48],                                 
+        price: 3000,                                            
+        available: true,                                         
     },
     2: {
-        id: 2,                                                   // https://www.lamoda.ru/p/mp002xw0c9k9/clothes-oodji-bryuki/
+        id: 2,                                                 
         name: 'Брюки',
         description: 'Лёкгие голубые брюки',
         sizes: [40, 42, 44, 46, 48, 50],
         price: 1800,
         available: true,
     },
-    3: {                                                          // https://www.lamoda.ru/p/mp002xw0d81o/clothes-zarina-futbolka/
+    3: {                                                          
         id: 3,
         name: 'Футболка',
         description: 'Чёрная футболка',
@@ -23,7 +23,7 @@ const goods = {
         price: 800,
         available: true,
     },
-    4: {                                                          // https://www.lamoda.ru/p/mp002xw0c45i/clothes-sela-pidzhak/
+    4: {                                                          
         id: 4,
         name: 'Пиджак',
         description: 'Бежевый двубортный пиджак',
@@ -31,7 +31,7 @@ const goods = {
         price: 7000,
         available: true,
     },
-    5: {                                                          // https://www.lamoda.ru/p/mp002xw0cmrb/clothes-befree-shorty-dzhinsovye/
+    5: {                                                   
         id: 5,
         name: 'Шорты',
         description: 'Джинсовые шорты с застёжкой молнией',
@@ -39,7 +39,7 @@ const goods = {
         price: 2700,
         available: true,
     },
-    6: {                                                          // https://www.lamoda.ru/p/rtlaaz617101/clothes-gap-khudi/
+    6: {                                                  
         id: 6,
         name: 'Худи',
         description: 'Худи чёрного цвета',
@@ -55,7 +55,7 @@ const goods = {
         price: 1700,
         available: true,
     },
-    8: {                                                          // https://www.lamoda.ru/p/rtlaak278002/clothes-levis-dzhinsy/                                       
+    8: {                                                                                           
         id: 8,
         name: 'Джинсы',
         description: 'Джинсы 501 CROP от Levils',
@@ -87,51 +87,57 @@ let basket = [
 ];
 
 
-
-// Реализуйте функцию вычисления общего количества и стоимости товаров в корзине. 
-// Функция должна возвращать объект, содержащий поля:
-//      totalAmount    Общее количество товаров в корзине
-//      totalSumm      Общая стоимость товаров в корзине
-
-function totalAmountSumm(arr_basket) {
-    
-    return {'totalAmount': 0, 
-            'totalSumm': 0,}
+function totalAmountSumm(arr_basket, obj_goods) {
+    let totalAmount = 0;
+    let totalSumm = 0;
+    for (let i = 0; i < arr_basket.length; i++) {
+      let id_product = arr_basket[i]['good'];
+      let amount_product = arr_basket[i]['amount'];
+      let cost_prouduct = obj_goods[id_product]['price'] * amount_product
+      totalSumm = totalSumm + cost_prouduct
+      totalAmount = totalAmount + amount_product
+    };
+    return {'totalAmount': totalAmount, 
+            'totalSumm': totalSumm,}
 }
 
 
-
-function pushToBasket(goodId, productQuantity) {
-    basket.push({good:goodId, amount:productQuantity});
-    return `\nВ корзину добавлен товар: ${goods[goodId]['name']} (${productQuantity} шт.)`;
+function pushToBasket(goodId, productQuantity, arr_basket, obj_goods) {
+    arr_basket.push({good:goodId, amount:productQuantity});
+    return `\nВ корзину добавлен товар: ${obj_goods[goodId]['name']} (${productQuantity} шт.)`;
 };
 
 
-function deleteGood(goodId) {
+function deleteGood(goodId, arr_basket, obj_goods) {
     let productQuantity = 0;
-    for (let i = 0; i < basket.length; i++) {
-      let id_product = basket[i]['good'];
+    for (let i = 0; i < arr_basket.length; i++) {
+      let id_product = arr_basket[i]['good'];
       if (id_product == goodId) {
-        productQuantity = basket[i]['amount'];
-        basket.splice(i, 1);
+        productQuantity = arr_basket[i]['amount'];
+        arr_basket.splice(i, 1);
       }  
     }
-    return `\n\nИз корзины удалён товар: ${goods[goodId]['name']} (${productQuantity} шт.)`;
+    return `\n\nИз корзины удалён товар: ${obj_goods[goodId]['name']} (${productQuantity} шт.)`;
 };
 
 
 function emptyBasket(arr_basket) {
-    while (arr_basket.length > 0) { basket.pop() };
+    while (arr_basket.length > 0) { 
+        arr_basket.pop();
+    };
     return `\n\nКорзина очищена.`;
 };
 
 
-
-console.log(pushToBasket(1, 5));
+console.log(totalAmountSumm(basket, goods));
 console.log(basket);
 
 
-console.log(deleteGood(2));
+console.log(pushToBasket(1, 5, basket, goods));
+console.log(basket);
+
+
+console.log(deleteGood(2, basket, goods));
 console.log(basket);
 
 
